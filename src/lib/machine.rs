@@ -12,16 +12,27 @@ impl Machine {
         }
     }
 
-    pub fn get_value(&self) -> u8 {
-        self.mem[self.pos]
+    pub fn get(&mut self) {
+        use std::io::*;
+        let input: Option<u8> = stdin()
+            .bytes()
+            .next()
+            .and_then(|res| res.ok())
+            .map(|byte| byte as u8);
+
+        match input {
+            Some(c) => self.mem[self.pos] = c,
+            None => {}
+        };
     }
 
-    pub fn set_value(&mut self, v: u8) {
-        self.mem[self.pos] = v;
+    pub fn put(&mut self) {
+        let c = self.mem[self.pos];
+        print!("{}", c as char);
     }
 
     pub fn inc(&mut self) {
-        if self.mem[self.pos] == std::u8::MAX{
+        if self.mem[self.pos] == std::u8::MAX {
             self.mem[self.pos] = std::u8::MIN;
         } else {
             self.mem[self.pos] += 1;
