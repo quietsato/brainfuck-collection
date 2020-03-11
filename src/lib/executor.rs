@@ -1,5 +1,5 @@
 use crate::lib::machine::*;
-struct Executor {
+pub struct Executor {
     pairs: Vec<usize>,
     src: Vec<char>,
     pos: usize,
@@ -21,8 +21,9 @@ impl Executor {
             .append(&mut src.chars().filter(|c| is_func(c)).collect());
     }
 
-    pub fn execute(&mut self) -> Result<u8, String>{
-        for i in self.pos..self.src.len() {
+    pub fn execute(&mut self) -> Result<u8, String> {
+        let mut i = self.pos;
+        while i < self.src.len() {
             match self.src[i] {
                 '+' => self.machine.inc(),
                 '-' => self.machine.dec(),
@@ -30,14 +31,22 @@ impl Executor {
                 '<' => self.machine.prev(),
                 ',' => self.machine.get(),
                 '.' => self.machine.put(),
-                '[' => {}
-                ']' => {}
+                '[' => {
+                    // push start index to list
+                }
+                ']' => {
+                    // pop start index from list
+                    // set self.pos to start index
+                }
+                _ => {}
             }
+
+            i += 1;
         }
 
         if self.pairs.is_empty() {
             Ok(0)
-        }else{
+        } else {
             Ok(1)
         }
     }
