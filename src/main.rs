@@ -1,5 +1,27 @@
 mod lib;
 
+use lib::executor::*;
+
 fn main() {
-    println!("Hello, world!");
+    // prints brainfuck
+    let mut src = String::from(
+        r#"
+++++++++[>++++++++<-]>++.
+<++++++[>++++++++<-]>.
+<----[>++++<-]>-.
+++++++++.
++++++.
+--------.
++++++++++++++++.
+<----[>++++<-]>--.
+++++++++.
+    "#,
+    );
+
+    let mut e = Executor::new();
+
+    e.append_src(&mut src);
+
+    e.execute();
+    e.notify_end_of_src();
 }

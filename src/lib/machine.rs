@@ -12,6 +12,10 @@ impl Machine {
         }
     }
 
+    pub fn get_value(&self) -> u8 {
+        self.mem[self.pos]
+    }
+
     pub fn get(&mut self) {
         use std::io::*;
         let input: Option<u8> = stdin()
@@ -59,7 +63,7 @@ impl Machine {
         if self.pos == 0 {
             self.pos = self.mem.len() - 1;
         } else {
-            self.pos += 1;
+            self.pos -= 1;
         }
     }
 }
