@@ -99,3 +99,16 @@ fn find_close_bracket(open_pos: usize, src: &Vec<char>) -> Option<usize> {
 
     return None;
 }
+
+#[test]
+fn test_find_close_bracket() {
+    let valid_src = String::from("...[...]...").chars().collect();
+    assert_eq!(find_close_bracket(3, &valid_src), Some(7));
+
+    let valid_src = String::from("...[.[].]...").chars().collect();
+    assert_eq!(find_close_bracket(3, &valid_src), Some(8));
+
+    let invalid_src = String::from("...[...").chars().collect();
+    assert_eq!(find_close_bracket(3, &invalid_src), None);
+}
+
