@@ -73,10 +73,7 @@ impl Executor {
 }
 
 fn is_func(c: &char) -> bool {
-    match c {
-        '+' | '-' | '>' | '<' | ',' | '.' | '[' | ']' => true,
-        _ => false,
-    }
+    String::from("+-><,.[]").contains(*c)
 }
 
 fn find_close_bracket(open_pos: usize, src: &Vec<char>) -> Option<usize> {
