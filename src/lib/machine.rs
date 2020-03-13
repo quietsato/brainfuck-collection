@@ -67,3 +67,78 @@ impl Machine {
         }
     }
 }
+
+#[test]
+fn machine_initialize_test() {
+    let m = Machine::new();
+
+    let size = 30000;
+    // initial position
+    assert_eq!(m.pos, 0);
+    // initial size
+    assert_eq!(m.mem.len(), size);
+
+    // all values are 0
+    assert_eq!(m.mem[0], 0);
+    assert_eq!(m.mem[5000], 0);
+    assert_eq!(m.mem[size - 1], 0);
+}
+
+#[test]
+fn machine_function_inc() {
+    let mut m = Machine::new();
+
+    assert_eq!(m.mem[0], 0);
+
+    m.inc();
+    assert_eq!(m.mem[0], 1);
+
+    use std::u8::MAX;
+    m.mem[0] = MAX;
+    m.inc();
+    assert_eq!(m.mem[0], 0);
+}
+
+#[test]
+fn machine_function_dec() {
+    let mut m = Machine::new();
+
+    m.mem[0] = 1;
+    assert_eq!(m.mem[0], 1);
+
+    m.dec();
+    assert_eq!(m.mem[0], 0);
+
+    use std::u8::MAX;
+    m.dec();
+    assert_eq!(m.mem[0], MAX);
+}
+
+#[test]
+fn machine_function_next() {
+    let mut m = Machine::new();
+
+    assert_eq!(m.pos, 0);
+
+    m.next();
+    assert_eq!(m.pos, 1);
+
+    m.pos = m.mem.len() - 1;
+    m.next();
+    assert_eq!(m.pos, 0);
+}
+
+#[test]
+fn machine_function_prev() {
+    let mut m = Machine::new();
+
+    m.pos = 1;
+    assert_eq!(m.pos, 1);
+
+    m.prev();
+    assert_eq!(m.pos, 0);
+
+    m.prev();
+    assert_eq!(m.pos, m.mem.len() - 1);
+}
+
