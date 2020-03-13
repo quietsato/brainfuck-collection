@@ -1,4 +1,4 @@
-use crate::lib::machine::*;
+use crate::lib::machine::Machine;
 
 pub struct Executor {
     pairs: Vec<usize>,
@@ -17,7 +17,7 @@ impl Executor {
 
     pub fn append_src(&mut self, src: String) {
         self.src
-            .append(&mut src.chars().filter(|c| is_func(c)).collect());
+            .append(&mut src.chars().filter(|c| is_func(*c)).collect());
     }
 
     pub fn execute(&mut self) -> Result<u8, String> {
@@ -33,7 +33,8 @@ impl Executor {
                 '[' => {
                     if self.machine.get_value() == 0 {
                         // skip loop
-                        match find_close_bracket(i, &self.src) {
+                        let src = self.src.iter().collect::<String>();
+                        match find_close_bracket(i, src.as_str()){
                             Some(close_pos) => i = close_pos,
                             None => return Err(format!("Mismatched brackets at {}", i)),
                         }
@@ -72,16 +73,15 @@ impl Executor {
     }
 }
 
-fn is_func(c: &char) -> bool {
-    String::from("+-><,.[]").contains(*c)
+fn is_func(c: char) -> bool {
+    String::from("+-><,.[]").contains(c)
 }
 
-fn find_close_bracket(open_pos: usize, src: &Vec<char>) -> Option<usize> {
-    let mut i = open_pos;
+fn find_close_bracket(open_pos: usize, src: &str) -> Option<usize> {
     let mut nest = 0;
 
-    while i < src.len() {
-        match src[i] {
+    for (i, c) in src.chars().enumerate().skip(open_pos){
+        match c {
             '[' => {
                 nest += 1;
             }
@@ -93,22 +93,20 @@ fn find_close_bracket(open_pos: usize, src: &Vec<char>) -> Option<usize> {
             }
             _ => {}
         }
-
-        i += 1;
     }
 
-    return None;
+    None
 }
 
 #[test]
 fn test_find_close_bracket() {
-    let valid_src = String::from("...[...]...").chars().collect();
+    let valid_src = "...[...]...";
     assert_eq!(find_close_bracket(3, &valid_src), Some(7));
 
-    let valid_src = String::from("...[.[].]...").chars().collect();
+    let valid_src = "...[.[].]...";
     assert_eq!(find_close_bracket(3, &valid_src), Some(8));
 
-    let invalid_src = String::from("...[...").chars().collect();
+    let invalid_src = "...[...";
     assert_eq!(find_close_bracket(3, &invalid_src), None);
 }
 

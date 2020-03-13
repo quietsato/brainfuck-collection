@@ -24,9 +24,8 @@ impl Machine {
             .and_then(|res| res.ok())
             .map(|byte| byte as u8);
 
-        match input {
-            Some(c) => self.mem[self.pos] = c,
-            None => {}
+        if let Some(c) = input {
+            self.mem[self.pos] = c
         };
     }
 
