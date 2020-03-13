@@ -14,8 +14,7 @@ fn main() {
 
     let mut e = Executor::new();
 
-    e.append_src(&mut src);
+    e.append_src(src);
 
-    e.execute();
-    e.notify_end_of_src();
+    e.execute().ok();
 }
