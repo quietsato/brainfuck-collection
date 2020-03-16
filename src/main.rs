@@ -1,8 +1,5 @@
-extern crate clap;
 use clap::{App, Arg};
-
-mod lib;
-use lib::executor::Executor;
+use brainfuck::execute;
 
 fn main() {
     let matches = App::new("BrainFuck Interpreter")
@@ -22,10 +19,7 @@ fn main() {
 
     // exec source passed as command line argument
     if let Some(src) = matches.value_of("Execute") {
-        let mut e = Executor::new();
-
-        e.append_src(src.to_string());
-        e.execute().unwrap();
+        execute(src).unwrap();
     }
     // exec source file
     else if let Some(file) = matches.value_of("FILE") {
@@ -36,9 +30,7 @@ fn main() {
         let mut src = String::new();
         file.read_to_string(&mut src).unwrap();
 
-        let mut e = Executor::new();
-        e.append_src(src);
-        e.execute().unwrap();
+        execute(src.as_str()).unwrap();
     }
     // exec source from stdin
     else {
@@ -47,9 +39,7 @@ fn main() {
         stdin().read_to_string(&mut src).unwrap();
 
 
-        let mut e = Executor::new();
-        e.append_src(src);
-        e.execute().unwrap();
+        execute(src.as_str()).unwrap();
     }
 }
 
